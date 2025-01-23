@@ -10,19 +10,13 @@ export const Navbar = () => (
       <nav>
         <ul className="flex space-x-4 items-center">
           <li>
-            <a href="#" className="hover:underline">
-              Home
-            </a>
+            <a href="#">Home</a>
           </li>
           <li>
-            <a href="#" className="hover:underline">
-              Transactions
-            </a>
+            <a href="#">Transactions</a>
           </li>
           <li>
-            <a href="#" className="hover:underline">
-              Settings
-            </a>
+            <a href="#">Settings</a>
           </li>
           <li>
             <ModeToggle />
