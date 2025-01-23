@@ -61,26 +61,32 @@ export default function TransactionTable() {
         </h3>
         <TransactionForm />
       </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-[100px]">ID</TableHead>
-            <TableHead>Transaction Type</TableHead>
-            <TableHead>Description</TableHead>
-            <TableHead className="text-right">Amount</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {sampleTransactions.map((transaction) => (
-            <TableRow key={transaction.id}>
-              <TableCell className="font-bold">{transaction.id}</TableCell>
-              <TableCell>{transaction.transactionType}</TableCell>
-              <TableCell>{transaction.description}</TableCell>
-              <TableCell className="text-right">{transaction.amount}</TableCell>
+      <div className="border rounded-md">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[100px]">ID</TableHead>
+              <TableHead>Transaction Type</TableHead>
+              <TableHead>Description</TableHead>
+              <TableHead className="text-right">Amount</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {sampleTransactions.map((transaction) => (
+              <TableRow key={transaction.id}>
+                <TableCell className="font-bold py-4">
+                  {transaction.id}
+                </TableCell>
+                <TableCell>{transaction.transactionType}</TableCell>
+                <TableCell>{transaction.description}</TableCell>
+                <TableCell className="text-right">
+                  {transaction.amount}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 }
