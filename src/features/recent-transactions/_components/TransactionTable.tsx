@@ -7,52 +7,35 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { TransactionForm } from "@/features/transaction-form";
+import z from "zod";
 
-const sampleTransactions = [
-  {
-    id: "MAR-001",
-    transactionType: "Income",
-    amount: "250.00",
-    description: "Fun Stuff",
-  },
-  {
-    id: "MAR-002",
-    transactionType: "Income",
-    amount: "150.00",
-    description: "PayPal",
-  },
-  {
-    id: "MAR-003",
-    transactionType: "Expense",
-    amount: "350.00",
-    description: "Bank Transfer",
-  },
-  {
-    id: "MAR-004",
-    transactionType: "Income",
-    amount: "450.00",
-    description: "Fun Stuff",
-  },
-  {
-    id: "MAR-005",
-    transactionType: "Income",
-    amount: "550.00",
-    description: "PayPal",
-  },
-  {
-    id: "MAR-006",
-    transactionType: "Expense",
-    amount: "200.00",
-    description: "Bank Transfer",
-  },
-  {
-    id: "MAR-007",
-    transactionType: "Expense",
-    amount: "300.00",
-    description: "Fun Stuff",
-  },
-];
-export default function TransactionTable() {
+const transactionSchema = z.array(
+  z.object({
+    id: z.number(),
+    transaction_type: z.number(),
+    amount: z.string(),
+    description: z.string(),
+  })
+);
+
+const TRANSACTION_TYPES = ["Income", "Expense", "Transfer"];
+
+async function getTransactions() {
+  const res = await fetch(`${process.env.BASE_API_URL}/api/transactions/`);
+  const data = await res.json();
+  const parseResult = transactionSchema.safeParse(data);
+  if (!parseResult.success) {
+    throw new Error(
+      `There was an error fetching transactions. ${parseResult.error.message}`
+    );
+  }
+
+  return parseResult.data;
+}
+
+export default async function TransactionTable() {
+  const transactions = await getTransactions();
+
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
@@ -68,16 +51,18 @@ export default function TransactionTable() {
               <TableHead className="w-[100px]">ID</TableHead>
               <TableHead>Transaction Type</TableHead>
               <TableHead>Description</TableHead>
-              <TableHead className="text-right">Amount</TableHead>
+              <TableHead className="text-right">Amount (PHP)</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {sampleTransactions.map((transaction) => (
+            {transactions.map((transaction) => (
               <TableRow key={transaction.id}>
                 <TableCell className="font-bold py-4">
                   {transaction.id}
                 </TableCell>
-                <TableCell>{transaction.transactionType}</TableCell>
+                <TableCell>
+                  {TRANSACTION_TYPES[transaction.transaction_type]}
+                </TableCell>
                 <TableCell>{transaction.description}</TableCell>
                 <TableCell className="text-right">
                   {transaction.amount}
