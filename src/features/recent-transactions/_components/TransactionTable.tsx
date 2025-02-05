@@ -21,7 +21,12 @@ const transactionSchema = z.array(
 const TRANSACTION_TYPES = ["Income", "Expense", "Transfer"];
 
 async function getTransactions() {
-  const res = await fetch(`${process.env.BASE_API_URL}/api/transactions/`);
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/transactions/`,
+    {
+      next: { tags: ["transactions"] },
+    }
+  );
   const data = await res.json();
   const parseResult = transactionSchema.safeParse(data);
   if (!parseResult.success) {

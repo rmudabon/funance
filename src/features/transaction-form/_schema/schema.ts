@@ -13,6 +13,7 @@ export const basicSchema = z.object({
         .max(999999999)
     ),
   description: z.string({ message: "Required" }),
+  expenseType: z.number(),
 });
 
 export type BasicForm = z.infer<typeof basicSchema>;

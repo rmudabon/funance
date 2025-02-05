@@ -23,6 +23,7 @@ import { Plus } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { BasicForm, basicSchema } from "../_schema/schema";
+import { revalidate } from "@/app/actions";
 
 export default function TransactionForm() {
   const form = useForm<BasicForm>({
@@ -30,11 +31,24 @@ export default function TransactionForm() {
     defaultValues: {
       amount: 0,
       description: "",
+      expenseType: 1,
     },
   });
 
-  const onSubmit = (values: BasicForm) => {
-    console.log(values);
+  const onSubmit = async (values: BasicForm) => {
+    const body = {
+      transaction_type: values.expenseType,
+      description: values.description,
+      amount: values.amount,
+    };
+    await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/transactions/`, {
+      method: "POST",
+      body: JSON.stringify(body),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    void revalidate("transactions");
   };
 
   return (
